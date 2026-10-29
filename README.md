@@ -54,18 +54,25 @@ ls /var/service | grep -v '^agetty-tty' > services.txt
 | Dev | git base-devel cargo uv podman podman-compose rsync github-cli |
 | Network | tailscale chrony waypipe wol |
 
-## Terminal UIs
+## Tools
 
-Lean by design: sway only tiles terminals, and every daily task has a TUI, so no GUI app is needed. vscode, chromium, qutebrowser and abiword are optional extras.
+Tools are picked lean, prioritising TUI and CLI over GUI, so sway only tiles terminals. vscode, chromium, qutebrowser and abiword are optional extras.
 
-| Task | Tool | Run |
-|------|------|-----|
-| Passwords (Bitwarden) | `rbw` + `fzf` picker | `Super+p` |
-| Email | `aerc` | `aerc` |
-| Tasks / tickets | `task` + `taskwarrior-tui` | `taskwarrior-tui` |
-| Editor | `helix` | `Super+c` or `hx` |
-| Panes, tabs, sessions | `zellij` | starts with every terminal |
-| System monitor | `btop` | `btop` |
+| Tool | What it does |
+|------|--------------|
+| `helix` | modal editor (`Super+c`) |
+| `nano` | simple fallback editor |
+| `zellij` | panes, tabs and sessions inside the terminal |
+| `aerc` | email client |
+| `rbw` + `fzf` | Bitwarden password picker (`Super+p`) |
+| `task` + `taskwarrior-tui` | tasks and tickets |
+| `btop` | system monitor |
+| `fzf` | fuzzy finder |
+| `fd`, `bat`, `eza` | faster `find`, `cat`, `ls` |
+| `jq` | JSON processor |
+| `podman` + `podman-compose` | containers, Docker-compatible |
+| `gh` | GitHub from the terminal |
+| `tailscale` | VPN to your other machines |
 
 ## Keys (sway)
 
