@@ -26,6 +26,7 @@ keyutils
 lvm2
 mdadm
 mesa-dri
+mosh
 nano
 pinentry-gtk
 pinentry-tty

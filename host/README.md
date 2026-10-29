@@ -5,7 +5,7 @@ The always-on machine where everything runs: Claude Code, editor, builds, tests 
 ## Setup
 
 1. Install Tailscale from tailscale.com or the Mac App Store and sign in with the same account as the client.
-2. Install Homebrew, clone this repo and run `./mini.sh`. It installs zellij, helix, git, gh, go, bun, duckdb, sqlite and Claude Code, disables sleep, enables wake on network and restart after power loss, and turns on Remote Login (ssh).
+2. Install Homebrew, clone this repo and run `./mini.sh`. It installs zellij, helix, git, gh, go, bun, duckdb, sqlite, mosh, the Go and Svelte/TypeScript language servers for helix, and Claude Code, disables sleep, enables wake on network and restart after power loss, and turns on Remote Login (ssh).
 3. Run `gh auth login`, then `claude` once and sign in. Paste the printed URL into a browser on the client.
 
 If Remote Login fails to enable, turn it on in System Settings > General > Sharing.
@@ -13,6 +13,10 @@ If Remote Login fails to enable, turn it on in System Settings > General > Shari
 ## Daily use
 
 You do not sit at the mini. From the client, `Super+Shift+Return` attaches to zellij session `main`. Open one zellij tab per project (`Ctrl+t`, `n`) and run `claude` in it. The session keeps running when the client disconnects.
+
+## Editing
+
+Use helix in a zellij pane (`hx`). Language servers are installed by `mini.sh`; `hx --health go` and `hx --health svelte` show what is found. The first time `mosh-server` runs, macOS may ask to allow incoming connections: allow it.
 
 ## Viewing a running app
 

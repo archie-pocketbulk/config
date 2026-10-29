@@ -51,7 +51,7 @@ ls /var/service | grep -v '^agetty-tty' > services.txt
 | Audio | pipewire wireplumber playerctl |
 | Hardware | brightnessctl tlp powertop acpid |
 | Editors | helix vscode nano abiword |
-| Terminal | zellij fzf btop jq fd bat eza |
+| Terminal | zellij mosh fzf btop jq fd bat eza |
 | Browsers | qutebrowser chromium |
 | Apps | aerc task taskwarrior-tui rbw |
 | Dev | git base-devel cargo uv podman podman-compose rsync github-cli |
@@ -91,7 +91,7 @@ Tools are picked lean, prioritising TUI and CLI over GUI, so sway only tiles ter
 
 ## Remote dev box
 
-`Super+Shift+Return` runs `dev-term`: it attaches to the zellij session `main` on the host `mini` and falls back to local zellij if `mini` is unreachable. `Super+Return` is always local.
+`Super+Shift+Return` runs `dev-term`: it attaches to the zellij session `main` on the host `mini` over mosh (ssh only does the login, then UDP 60000-61000 over tailscale, so wifi drops and sleep/resume reconnect instantly) and falls back to local zellij if `mini` is unreachable. `Super+Return` is always local.
 
 One-time setup, after the [host](../host/README.md) exists: run `./laptop.sh`. It adds `Host mini` to `~/.ssh/config` (kept out of the repo, it holds your username), generates a key if needed, and copies it to the host. If `mini` does not resolve, give it the host's 100.x tailscale address.
 
