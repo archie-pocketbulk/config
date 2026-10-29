@@ -1,7 +1,7 @@
 #!/bin/sh
 # Run on the Mac mini (needs Homebrew). Tailscale itself is installed by hand, see remote-dev.md.
 set -e
-brew install zellij helix git gh podman
+brew install zellij helix git gh go bun duckdb sqlite
 command -v claude >/dev/null || curl -fsSL https://claude.ai/install.sh | bash
 # never sleep, wake on network, restart after power cut
 sudo pmset -a sleep 0 disksleep 0 womp 1 autorestart 1

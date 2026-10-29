@@ -13,7 +13,7 @@ Tailscale gives both machines private addresses on one encrypted network, reacha
 
 **1. Mini** (once, at the machine or over screen sharing)
 1. Install Tailscale from tailscale.com or the Mac App Store, sign in with the same account as the laptop.
-2. Install Homebrew, then run `remote/mini.sh` from a clone of this repo. It installs zellij, helix, git, gh, podman and Claude Code, stops sleep and enables Remote Login.
+2. Install Homebrew, then run `remote/mini.sh` from a clone of this repo. It installs zellij, helix, git, gh, go, bun, duckdb, sqlite and Claude Code, stops sleep and enables Remote Login.
 3. `gh auth login`, then run `claude` once and sign in (paste the URL it prints into the laptop browser).
 
 **2. Laptop**
@@ -32,7 +32,7 @@ Inside the mini session, open one zellij tab per project (`Ctrl+t`, `n`) and run
 
 ## Viewing your running app
 
-Start the dev server on the mini listening on all interfaces, for example `vite --host`, `next dev -H 0.0.0.0`, or `python -m http.server`. On the laptop open `http://mini:3000` (your port). It is only reachable over your tailnet.
+Start the dev server on the mini listening on all interfaces, for example `bun run dev --host` (SvelteKit) or your Go binary on `:8080`. On the laptop open `http://mini:3000` (your port). It is only reachable over your tailnet.
 
 ## Battery
 
