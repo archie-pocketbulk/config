@@ -1,0 +1,10 @@
+#!/bin/sh
+# Chromium with its network traffic tunnelled through the mini (ssh host "mini"):
+# localhost:PORT in this browser reaches the mini, so OAuth callbacks work.
+ssh -N -D 1080 -o ExitOnForwardFailure=yes -o ControlPath=none mini &
+tunnel=$!
+trap 'kill $tunnel' EXIT
+sleep 1
+# own profile, or a running chromium would ignore the proxy flags
+chromium --user-data-dir="$HOME/.cache/chromium-mini" \
+    --proxy-server=socks5://localhost:1080 --proxy-bypass-list='<-loopback>' "$@"

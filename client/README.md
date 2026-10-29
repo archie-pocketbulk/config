@@ -97,6 +97,10 @@ One-time setup, after the [host](../host/README.md) exists: run `./laptop.sh`. I
 
 The laptop key has no passphrase, because `dev-term` checks reachability non-interactively. It is a login to the host, so keep the laptop disk encrypted.
 
+## Logins that redirect to localhost
+
+Some tools on the mini finish login by redirecting the browser to `http://localhost:<port>/callback`. On the laptop that `localhost` is the wrong machine. `chromium-mini` opens Chromium with its traffic tunnelled through the mini, so `localhost` means the mini. The browser itself still runs on the laptop, in its own profile.
+
 ## Bitwarden unlock
 
 `rbw` uses `rbw-pinentry`, which reads the master password from the kernel keyring. After each boot, `Super+p` runs `rbw-save` once to ask for it. The keyring is memory only and clears on reboot. If you change the master password, run `rbw-save` again.
