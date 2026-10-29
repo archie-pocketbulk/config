@@ -89,12 +89,7 @@ Tools are picked lean, prioritising TUI and CLI over GUI, so sway only tiles ter
 
 ## Remote dev box
 
-Heavy work (builds, Claude, containers) can run on another machine, with this laptop as a thin client. `Super+Return` is local; `Super+Shift+Return` runs `dev-term`, which attaches to a zellij session on the host `mini` and falls back to local if it is unreachable. Sessions survive the laptop sleeping or dropping wifi.
-
-Setup, once the remote machine exists:
-1. install tailscale there and join the same tailnet, enable ssh (macOS: Remote Login)
-2. add to `~/.ssh/config` (not in repo): `Host mini` / `HostName <tailnet name>` / `User <user>`
-3. `ssh-copy-id mini`, install `zellij` on the remote
+`Super+Return` is a local terminal. `Super+Shift+Return` attaches to a zellij session on a remote dev box (`mini`), falling back to local if unreachable. Setup and usage: [remote-dev.md](remote-dev.md).
 
 ## Bitwarden unlock
 
