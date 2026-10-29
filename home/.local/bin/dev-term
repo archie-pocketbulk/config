@@ -1,0 +1,7 @@
+#!/bin/sh
+# Shell on the remote dev box (ssh host "mini", see README) if reachable, else local zellij.
+if ssh -o BatchMode=yes -o ConnectTimeout=2 mini true 2>/dev/null; then
+    exec ssh -t mini zellij attach -c main
+fi
+echo "mini unreachable, using local zellij" >&2; sleep 1
+exec zellij

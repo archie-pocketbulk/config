@@ -21,6 +21,7 @@ floating_modifier $mod normal
 
 bindsym $mod+Return exec $term
 bindsym $mod+d exec $menu
+bindsym $mod+Shift+Return exec $term -e dev-term
 bindsym $mod+c exec foot -e hx
 bindsym $mod+Shift+q kill
 bindsym $mod+Shift+c reload
