@@ -56,7 +56,7 @@ ls /var/service | grep -v '^agetty-tty' > services.txt
 
 ## Terminal UIs
 
-Most daily tasks have a TUI, so everything runs in the terminal.
+Lean by design: sway only tiles terminals, and every daily task has a TUI, so no GUI app is needed. vscode, chromium, qutebrowser and abiword are optional extras.
 
 | Task | Tool | Run |
 |------|------|-----|
@@ -66,7 +66,6 @@ Most daily tasks have a TUI, so everything runs in the terminal.
 | Editor | `helix` | `Super+c` or `hx` |
 | Panes, tabs, sessions | `zellij` | starts with every terminal |
 | System monitor | `btop` | `btop` |
-| Browser | `qutebrowser` (keyboard-driven GUI) | `qutebrowser` |
 
 ## Keys (sway)
 
