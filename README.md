@@ -54,6 +54,20 @@ ls /var/service | grep -v '^agetty-tty' > services.txt
 | Dev | git base-devel cargo uv podman podman-compose rsync github-cli |
 | Network | tailscale chrony waypipe wol |
 
+## Terminal UIs
+
+Most daily tasks have a TUI, so everything runs in the terminal.
+
+| Task | Tool | Run |
+|------|------|-----|
+| Passwords (Bitwarden) | `rbw` + `fzf` picker | `Super+p` |
+| Email | `aerc` | `aerc` |
+| Tasks / tickets | `task` + `taskwarrior-tui` | `taskwarrior-tui` |
+| Editor | `helix` | `Super+c` or `hx` |
+| Panes, tabs, sessions | `zellij` | starts with every terminal |
+| System monitor | `btop` | `btop` |
+| Browser | `qutebrowser` (keyboard-driven GUI) | `qutebrowser` |
+
 ## Keys (sway)
 
 | Key | Action |
