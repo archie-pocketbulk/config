@@ -79,6 +79,7 @@ Tools are picked lean, prioritising TUI and CLI over GUI, so sway only tiles ter
 | Key | Action |
 |-----|--------|
 | `Super+Return` | terminal |
+| `Super+Shift+Return` | terminal on the remote dev box (falls back to local) |
 | `Super+d` | launcher |
 | `Super+Shift+Return` | terminal on the remote dev box (`mini`), local zellij if unreachable |
 | `Super+c` | helix |
