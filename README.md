@@ -1,0 +1,70 @@
+# Void Linux config
+
+Void + runit + sway on a ThinkPad. Wifi: `wpa_supplicant` + `dhcpcd`.
+
+## Install
+
+```
+git clone <repo> && cd config && ./install.sh
+```
+
+Needs network and sudo. It does, in order:
+1. enables the nonfree repo, installs `packages.txt`
+2. enables `services.txt` (runit)
+3. symlinks `home/` into `$HOME` (existing files move to `*.bak`)
+4. asks for git name and email if `~/.gitconfig` has none
+5. runs `tools.sh` (go, bun)
+6. `tailscale up` if not already connected (opens a login link)
+
+## Manual steps (secrets, not in repo)
+
+```
+wpa_passphrase "ssid" "password" | sudo tee -a /etc/wpa_supplicant/wpa_supplicant.conf
+sudo sv restart wpa_supplicant
+rbw config set email <email> && rbw login
+gh auth login
+```
+
+## Files
+
+| Path | What |
+|------|------|
+| `packages.txt` | `xbps-query -m`, minus base/kernel/grub/live/build leftovers |
+| `services.txt` | `/var/service` minus agetty |
+| `tools.sh` | go, bun (cargo and uv are in `packages.txt`) |
+| `home/` | sway, foot, git, `.bashrc`, `.local/bin/rbw-*` |
+
+Refresh the lists:
+```
+xbps-query -m | sed 's/-[^-]*$//' | grep -vxE 'base-system|linux|grub-.*|void-live-audio|void-docs-browse' > packages.txt
+ls /var/service | grep -v '^agetty-tty' > services.txt
+```
+
+## Packages
+
+| Area | Packages |
+|------|----------|
+| Desktop | sway foot wofi i3status swaylock swayidle grim slurp wl-clipboard |
+| Audio | pipewire wireplumber playerctl |
+| Hardware | brightnessctl tlp powertop acpid |
+| Editors | helix vscode nano abiword |
+| Terminal | zellij fzf btop jq fd bat eza |
+| Browsers | qutebrowser chromium |
+| Apps | aerc task taskwarrior-tui rbw |
+| Dev | git base-devel cargo uv podman podman-compose rsync github-cli |
+| Network | tailscale chrony waypipe wol |
+
+## Keys (sway)
+
+| Key | Action |
+|-----|--------|
+| `Super+Return` | terminal |
+| `Super+d` | launcher |
+| `Super+c` | helix |
+| `Super+p` | Bitwarden entry to clipboard |
+| `Super+Shift+w` | wifi back on |
+| `Print` | region screenshot to `~/Pictures` |
+
+## Bitwarden unlock
+
+`rbw` uses `rbw-pinentry`, which reads the master password from the kernel keyring. After each boot, `Super+p` runs `rbw-save` once to ask for it. The keyring is memory only and clears on reboot. If you change the master password, run `rbw-save` again.

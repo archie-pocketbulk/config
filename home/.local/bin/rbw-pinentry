@@ -1,0 +1,14 @@
+#!/bin/sh
+# Minimal pinentry for rbw: answers GETPIN from the kernel keyring (see rbw-save).
+echo "OK ready"
+while read -r cmd _; do
+    case $cmd in
+        GETPIN)
+            id=$(keyctl request user rbw-master 2>/dev/null) || { echo "ERR 83886179 no key"; continue; }
+            # Assuan data lines escape %, CR, LF
+            echo "D $(keyctl pipe "$id" | sed 's/%/%25/g')"
+            echo OK ;;
+        BYE) echo OK; exit ;;
+        *) echo OK ;;
+    esac
+done

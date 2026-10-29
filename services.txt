@@ -1,0 +1,11 @@
+acpid
+chronyd
+dbus
+dhcpcd
+elogind
+seatd
+sshd
+tailscaled
+tlp
+udevd
+wpa_supplicant

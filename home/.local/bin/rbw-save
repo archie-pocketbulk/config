@@ -1,0 +1,5 @@
+#!/bin/sh
+# Store the Bitwarden master password in the kernel keyring (memory only, gone at reboot).
+printf 'Bitwarden master password: ' >&2
+stty -echo; read -r pw; stty echo; echo >&2
+keyctl add user rbw-master "$pw" @u >/dev/null

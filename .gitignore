@@ -1,0 +1,6 @@
+# never commit secrets
+password/
+*.txt.secret
+wpa_supplicant.conf
+aerc/accounts.conf
+core.*
