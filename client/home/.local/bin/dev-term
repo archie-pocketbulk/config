@@ -1,5 +1,5 @@
 #!/bin/sh
-# Shell on the remote dev box (ssh host "mini", see README) if reachable, else local zellij.
+# Shell on the remote dev box (ssh host "mini", see client/README.md) if reachable, else local zellij.
 if ssh -o BatchMode=yes -o ConnectTimeout=2 mini true 2>/dev/null; then
     exec ssh -t mini zellij attach -c main
 fi

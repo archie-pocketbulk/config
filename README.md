@@ -1,96 +1,34 @@
-# Void Linux config
+# Ultra-low-compute dev experiment
 
-Void + runit + sway on a ThinkPad. Wifi: `wpa_supplicant` + `dhcpcd`.
-
-## Install
+Can a laptop be just a screen and a keyboard? This repo tests that: all development compute runs on a Mac mini that stays on, and the laptop only types into it.
 
 ```
-git clone <repo> && cd config && ./install.sh
+laptop (foot -> ssh) --tailscale--> mac mini (zellij: Claude Code, helix, builds, tests, dev servers)
+laptop browser -------tailscale--> http://mini:3000        mac mini (GitHub Actions runner)
 ```
 
-Needs network and sudo. It does, in order:
-1. enables the nonfree repo, installs `packages.txt`
-2. enables `services.txt` (runit)
-3. symlinks `home/` into `$HOME` (existing files move to `*.bak`)
-4. asks for git name and email if `~/.gitconfig` has none
-5. runs `tools.sh` (go, bun)
-6. `tailscale up` if not already connected (opens a login link)
+## Why
 
-## Manual steps (secrets, not in repo)
+- **Power efficiency.** An Apple Silicon mini idles at single-digit watts and does heavy work far more efficiently per watt than a laptop on battery. Compute moves from the device that has a battery to the one that doesn't.
+- **Laptop battery.** The laptop runs a window manager, a terminal and wifi. It never builds, tests, runs a browser engine for the app, or hosts Claude. Battery life is limited by the screen, not the workload.
+- **Faster, more consistent network.** The mini sits on wired ethernet and does the heavy traffic: git, package downloads, model API calls. The laptop's wifi link carries only keystrokes and text, so a weak or flaky connection barely matters, and zellij keeps the session alive through drops.
+- **Always on.** Long agent runs, tests and CI finish while the laptop is shut. Reattach later and carry on.
+- **Wake as a fallback.** The mini is set to never sleep. It can also wake on network traffic, but Wake-on-LAN only works from the same local network.
 
-```
-wpa_passphrase "ssid" "password" | sudo tee -a /etc/wpa_supplicant/wpa_supplicant.conf
-sudo sv restart wpa_supplicant
-rbw config set email <email> && rbw login
-gh auth login
-```
+## The experiment
 
-## Files
+Any machine with a screen, keyboard and ssh should be a usable dev machine. Success looks like: more battery hours, no waiting on local builds, work that survives disconnects. The cost is that development needs the network: no connection means no mini, and the laptop falls back to local zellij only. The mini is also a single point of failure, so power cuts and internet outages stop work.
 
-| Path | What |
-|------|------|
-| `packages.txt` | `xbps-query -m`, minus base/kernel/grub/live/build leftovers |
-| `services.txt` | `/var/service` minus agetty |
-| `tools.sh` | go, bun (cargo and uv are in `packages.txt`) |
-| `home/` | sway, foot, git, `.bashrc`, `.local/bin/rbw-*` |
+## Layout
 
-Refresh the lists:
-```
-xbps-query -m | sed 's/-[^-]*$//' | grep -vxE 'base-system|linux|grub-.*|void-live-audio|void-docs-browse' > packages.txt
-ls /var/service | grep -v '^agetty-tty' > services.txt
-```
+| Folder | Role |
+|--------|------|
+| [`client/`](client/README.md) | the laptop: Void Linux + sway config, packages, install script, ssh setup |
+| [`host/`](host/README.md) | the Mac mini: dev tools, always-on settings, tailscale, dev servers |
+| [`runner/`](runner/README.md) | the Mac mini as a self-hosted GitHub Actions runner (private repos only) |
 
-## Packages
+## Order of setup
 
-| Area | Packages |
-|------|----------|
-| Desktop | sway foot wofi i3status swaylock swayidle grim slurp wl-clipboard |
-| Audio | pipewire wireplumber playerctl |
-| Hardware | brightnessctl tlp powertop acpid |
-| Editors | helix vscode nano abiword |
-| Terminal | zellij fzf btop jq fd bat eza |
-| Browsers | qutebrowser chromium |
-| Apps | aerc task taskwarrior-tui rbw |
-| Dev | git base-devel cargo uv podman podman-compose rsync github-cli |
-| Network | tailscale chrony waypipe wol |
-
-## Tools
-
-Tools are picked lean, prioritising TUI and CLI over GUI, so sway only tiles terminals. vscode, chromium, qutebrowser and abiword are optional extras.
-
-| Tool | What it does |
-|------|--------------|
-| `helix` | modal editor (`Super+c`) |
-| `nano` | simple fallback editor |
-| `zellij` | panes, tabs and sessions inside the terminal |
-| `aerc` | email client |
-| `rbw` + `fzf` | Bitwarden password picker (`Super+p`) |
-| `task` + `taskwarrior-tui` | tasks and tickets |
-| `btop` | system monitor |
-| `fzf` | fuzzy finder |
-| `fd`, `bat`, `eza` | faster `find`, `cat`, `ls` |
-| `jq` | JSON processor |
-| `podman` + `podman-compose` | containers, Docker-compatible |
-| `gh` | GitHub from the terminal |
-| `tailscale` | VPN to your other machines |
-
-## Keys (sway)
-
-| Key | Action |
-|-----|--------|
-| `Super+Return` | terminal |
-| `Super+Shift+Return` | terminal on the remote dev box (falls back to local) |
-| `Super+d` | launcher |
-| `Super+Shift+Return` | terminal on the remote dev box (`mini`), local zellij if unreachable |
-| `Super+c` | helix |
-| `Super+p` | Bitwarden entry to clipboard |
-| `Super+Shift+w` | wifi back on |
-| `Print` | region screenshot to `~/Pictures` |
-
-## Remote dev box
-
-`Super+Return` is a local terminal. `Super+Shift+Return` attaches to a zellij session on a remote dev box (`mini`), falling back to local if unreachable. Setup and usage: [remote-dev.md](remote-dev.md).
-
-## Bitwarden unlock
-
-`rbw` uses `rbw-pinentry`, which reads the master password from the kernel keyring. After each boot, `Super+p` runs `rbw-save` once to ask for it. The keyring is memory only and clears on reboot. If you change the master password, run `rbw-save` again.
+1. [Host](host/README.md): install tailscale, run `host/mini.sh`.
+2. [Client](client/README.md): run `client/install.sh`, then `client/laptop.sh`.
+3. [Runner](runner/README.md), optional: register the mini for CI.
