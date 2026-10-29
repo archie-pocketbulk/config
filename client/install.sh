@@ -3,11 +3,17 @@ set -e
 cd "$(dirname "$0")"
 sudo xbps-install -Sy void-repo-nonfree  # vscode and others live in nonfree
 xargs -a packages.txt sudo xbps-install -Sy
+# GPU drivers are per machine: i = intel, a = amd
+printf 'GPU [i]ntel or [a]md: '; read -r gpu
+case $gpu in
+    a) sudo xbps-install -Sy mesa-vulkan-radeon ;;
+    *) sudo xbps-install -Sy mesa-vulkan-intel intel-video-accel ;;
+esac
 for s in $(cat services.txt); do
     [ -e "/var/service/$s" ] || sudo ln -s "/etc/sv/$s" /var/service/
 done
 # symlink home/ into $HOME; real files already there move to <name>.bak
-find "$PWD/home" -type f | while read -r src; do
+find "$PWD/home" -type f | while IFS= read -r src; do
     dst="$HOME/${src#"$PWD/home/"}"
     mkdir -p "$(dirname "$dst")"
     [ -e "$dst" ] && [ ! -L "$dst" ] && mv "$dst" "$dst.bak"

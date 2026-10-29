@@ -16,7 +16,7 @@ You do not sit at the mini. From the client, `Super+Shift+Return` attaches to ze
 
 ## Viewing a running app
 
-Start the dev server listening on all interfaces, for example `bun run dev --host` (SvelteKit) or your Go binary on `:8080`. On the client open `http://mini:3000` (your port). It is reachable only over the tailnet.
+Bind the dev server to the mini's tailscale address, not all interfaces, so nothing else on the mini's local network can reach it: `bun run dev --host "$(tailscale ip -4)"` (SvelteKit) or listen on that address in Go. On the client open `http://mini:<port>`, e.g. 5173 for Vite or 8080 for Go.
 
 ## Local CI checks
 

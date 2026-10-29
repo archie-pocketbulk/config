@@ -4,7 +4,7 @@ Can a laptop be just a screen and a keyboard? This repo tests that: all developm
 
 ```
 laptop (foot -> ssh) --tailscale--> mac mini (zellij: Claude Code, helix, builds, tests, dev servers)
-laptop browser -------tailscale--> http://mini:3000        mac mini (GitHub Actions runner)
+laptop browser -------tailscale--> http://mini:<port>      mac mini (GitHub Actions runner)
 ```
 
 ## Why
@@ -18,6 +18,8 @@ laptop browser -------tailscale--> http://mini:3000        mac mini (GitHub Acti
 ## The experiment
 
 Any machine with a screen, keyboard and ssh should be a usable dev machine. Success looks like: more battery hours, no waiting on local builds, work that survives disconnects. The cost is that development needs the network: no connection means no mini, and the laptop falls back to local zellij only. The mini is also a single point of failure, so power cuts and internet outages stop work.
+
+I accept that trade. Development already needs the internet: AI coding, scanning and CI all run in the cloud, and I am rarely far from home. With no connection, reading docs and code is the better use of the time anyway, so the offline fallback stays minimal.
 
 ## Layout
 
